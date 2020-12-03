@@ -11,15 +11,19 @@ namespace Day_03
 			var input = File.ReadAllLines("./input.txt");
 			var map = BuildMap(input);
 
-			var collisions  = CountTreeCollisions(map);
-			Console.WriteLine($"total collisions: {collisions}");
+			long productOfCollisions = CountTreeCollisions(map, 1, 1);
+			productOfCollisions *= CountTreeCollisions(map, 3, 1);
+			productOfCollisions *= CountTreeCollisions(map, 5, 1);
+			productOfCollisions *= CountTreeCollisions(map, 7, 1);
+			productOfCollisions *= CountTreeCollisions(map, 1, 2);
+			
+			Console.WriteLine($"product of all collisions: {productOfCollisions}");
 		}
 
 		private static int[,] BuildMap(IReadOnlyList<string> input)
 		{
 			var height = input.Count;
 			var width = input[0].Length;
-
 			var map = new int[width, height];
 
 			for (var y = 0; y < input.Count; y++)
@@ -33,7 +37,7 @@ namespace Day_03
 			return map;
 		}
 
-		private static int CountTreeCollisions(int[,] map)
+		private static int CountTreeCollisions(int[,] map, int offsetX, int offsetY)
 		{
 			var width = map.GetLength(0);
 			var height = map.GetLength(1);
@@ -44,15 +48,15 @@ namespace Day_03
 			
 			while (y < height)
 			{
-				x += 3;
-				y += 1;
+				x += offsetX;
+				y += offsetY;
 
 				if (x >= width)
 				{
 					x -= width;
 				}
 
-				if (y == height)
+				if (y >= height)
 				{
 					break;
 				}
